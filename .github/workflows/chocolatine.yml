@@ -21,7 +21,7 @@ jobs:
       image: ghcr.io/epitech/coding-style-checker:latest
 
     steps:
-      #- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - run: |
           check.sh $(pwd) $(pwd)
           if [ ! -s "coding-style-reports.log" ]; then
@@ -38,16 +38,16 @@ jobs:
       image: epitechcontent/epitest-docker
 
     steps:
-      #- uses: actions/checkout@v4
-        run: |
+      - uses: actions/checkout@v4
+      - run: |
           make
           if [ ! -f ${{ env.EXECUTABLE }} ]; then
             echo "Compilation failed."
             exit 1
           else
             echo "Compilation succeeded."
+            make clean
           fi
-        run: make clean
 
   running_test:
     needs: check_program_compilation
@@ -56,8 +56,8 @@ jobs:
       image: epitechcontent/epitest-docker
 
     steps:
-      #- uses: actions/checkout@v4
-        run: |
+      - uses: actions/checkout@v4
+      - run: |
           make tests_run
           if [ ! -f ${{ env.EXECUTABLE }} ]; then
             echo "Tests failed."
