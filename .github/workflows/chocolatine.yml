@@ -39,9 +39,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        run: make
-        timeout-minutes: 2
         run: |
+          make
           if [ ! -f ${{ env.EXECUTABLE }} ]; then
             echo "Compilation failed."
             exit 1
@@ -58,9 +57,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: make tests_run
-        timeout-minutes: 2
         run: |
+          make tests_run
           if [ ! -f ${{ env.EXECUTABLE }} ]; then
             echo "Tests failed."
             exit 1
