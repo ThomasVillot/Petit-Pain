@@ -1,0 +1,81 @@
+name: chocolatine
+
+env:
+  MIRROR_URL: git@github.com:EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot.git
+  EXECUTABLE: ./anagram
+
+on:
+  push:
+    branches-ignore:
+      - "ga-ignore"
+  pull_request:
+    branches-ignore:
+      - "ga-ignore"
+  check_run:
+    types: [rerequested, completed]
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          check.sh $(pwd) $(pwd)
+          if [ ! -s "coding-style-reports.log" ]; then
+            echo "File is empty."
+          else
+            echo "File is not empty."
+            exit 1
+          fi
+
+  check_program_compilation:
+    needs: check_coding_style
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+      - uses: actions/checkout@v4
+        run: make
+        timeout-minutes: 2
+        run: |
+          if [ ! -f ${{ env.EXECUTABLE }} ]; then
+            echo "Compilation failed."
+            exit 1
+          else
+            echo "Compilation succeeded."
+          fi
+        run: make clean
+
+  running_test:
+    needs: check_program_compilation
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: make tests_run
+        timeout-minutes: 2
+        run: |
+          if [ ! -f ${{ env.EXECUTABLE }} ]; then
+            echo "Tests failed."
+            exit 1
+          else
+            echo "Tests succeeded."
+          fi
+
+  push_to_mirror:
+    needs: running_test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ env.MIRROR_URL }}
+          ssh_private_key: ${{ secrets.CODECOMMIT_SSH_PRIVATE_KEY }}
