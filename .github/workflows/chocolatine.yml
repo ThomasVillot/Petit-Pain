@@ -21,7 +21,7 @@ jobs:
       image: ghcr.io/epitech/coding-style-checker:latest
 
     steps:
-      - uses: actions/checkout@v4
+      #- uses: actions/checkout@v4
       - run: |
           check.sh $(pwd) $(pwd)
           if [ ! -s "coding-style-reports.log" ]; then
@@ -38,7 +38,7 @@ jobs:
       image: epitechcontent/epitest-docker
 
     steps:
-      - uses: actions/checkout@v4
+      #- uses: actions/checkout@v4
         run: |
           make
           if [ ! -f ${{ env.EXECUTABLE }} ]; then
@@ -56,7 +56,7 @@ jobs:
       image: epitechcontent/epitest-docker
 
     steps:
-      - uses: actions/checkout@v4
+      #- uses: actions/checkout@v4
         run: |
           make tests_run
           if [ ! -f ${{ env.EXECUTABLE }} ]; then
