@@ -15,7 +15,21 @@ on:
     types: [rerequested, completed]
 
 jobs:
+   check_repository:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - id: check
+        run: |
+          if [[ "${{ github.repository }}" == "EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot" ]]; then
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
   check_coding_style:
+    needs: check_repository
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/epitech/coding-style-checker:latest
