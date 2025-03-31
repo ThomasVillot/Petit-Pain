@@ -59,7 +59,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           make tests_run
-          if [ ! -f ${{ env.EXECUTABLE }} ]; then
+          if [ $? -ne 0 ]; then
             echo "Tests failed."
             exit 1
           else
