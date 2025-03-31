@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check if repository is the mirror
         run: |
-          if [[ "${{ github.repository }}" == "EpitechPromo2028/B-DOP-200-LIL-2-1-chocolatine-thomas.villot" ]]; then
+          if [[ "${{ github.repository }}" == "EpitechPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot" ]]; then
             echo "Already in Epitech repository, no need to push to mirror"
             echo "PUSH_TO_MIRROR=false" >> $GITHUB_ENV
           else
