@@ -3,7 +3,6 @@ name: chocolatine
 env:
   MIRROR_URL: git@github.com:EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot.git
   EXECUTABLE: ./anagram
-  PUSH_TO_MIRROR: true
 
 on:
   push:
@@ -24,14 +23,13 @@ jobs:
         run: |
           if [[ "${{ github.repository }}" == "EpitechPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot" ]]; then
             echo "Already in Epitech repository, no need to push to mirror"
-            echo "PUSH_TO_MIRROR=false" >> $GITHUB_ENV
+            exit 0
           else
             echo "Not in Epitech repository, will push to mirror"
-            echo "PUSH_TO_MIRROR=true" >> $GITHUB_ENV
+            exit 1
           fi
 
   check_coding_style:
-    needs: check_repository
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/epitech/coding-style-checker:latest
@@ -84,7 +82,7 @@ jobs:
 
   push_to_mirror:
     needs: running_test
-    if: ${{ env.PUSH_TO_MIRROR }} == 'true'
+    needs: check_repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
