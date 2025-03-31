@@ -82,15 +82,15 @@ jobs:
             echo "Tests succeeded."
           fi
 
-push_to_mirror:
-  needs: running_test
-  if: env.PUSH_TO_MIRROR == 'true'
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - uses: pixta-dev/repository-mirroring-action@v1
-      with:
-        target_repo_url: ${{ env.MIRROR_URL }}
-        ssh_private_key: ${{ secrets.PETIT_PAIN }}
+  push_to_mirror:
+    needs: running_test
+    if: env.PUSH_TO_MIRROR == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ env.MIRROR_URL }}
+          ssh_private_key: ${{ secrets.PETIT_PAIN }}
