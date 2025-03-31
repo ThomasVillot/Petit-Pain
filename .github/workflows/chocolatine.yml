@@ -81,7 +81,7 @@ jobs:
           fi
 
   push_to_mirror:
-    needs: running_test && check_repository
+    needs:  check_repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
