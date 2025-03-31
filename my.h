@@ -49,6 +49,7 @@ char *my_strstr(char *str, char const *to_find);
 char *my_strupcase(char *str);
 void my_swap(char *a, char *b);
 char *my_strdup(char const *src);
+char *maj(char *str);
 
 struct info_param {
     int lenght;
