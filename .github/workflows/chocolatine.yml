@@ -84,7 +84,7 @@ jobs:
 
   push_to_mirror:
     needs: running_test
-    if: env.PUSH_TO_MIRROR == 'true'
+    if: ${{ env.PUSH_TO_MIRROR == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
