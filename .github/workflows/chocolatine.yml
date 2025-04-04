@@ -62,19 +62,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Compile project
-        run: make
-      - name: Clean project
-        run: make clean
-      - name: Check executables
-        run: |
-          IFS=',' read -ra FILES <<< "${EXECUTABLES}"
-          for exe in "${FILES[@]}"; do
-            if [[ ! -x "$exe" ]]; then
-              echo "::error file=$exe::Missing or non-executable file: $exe"
-              exit 1
-            fi
-          done
+      - run: |
+          make
+          if [ ! -f ${{ env.EXECUTABLE }} ]; then
+            echo "Compilation failed."
+            exit 1
+          else
+            echo "Compilation succeeded."
+            make clean
+          fi
 
   run_tests:
     needs: check_program_compilation
@@ -86,9 +82,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Run unit tests
-        run: |
+      - run: |
           make tests_run
+          if [ $? -ne 0 ]; then
+            echo "Tests failed."
+            exit 1
+          else
+            echo "Tests succeeded."
+          fi
 
   push_to_mirror:
     needs: [check_repository, run_tests]
