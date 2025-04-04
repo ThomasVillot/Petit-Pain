@@ -1,8 +1,8 @@
 name: chocolatine
 
 env:
-  MIRROR_URL: https://github.com/EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot
-  EXECUTABLE: ./anagram
+  MIRROR_URL: "https://github.com/EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot"
+  EXECUTABLE: "./anagram"
 
 on:
   push:
