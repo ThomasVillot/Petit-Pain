@@ -1,7 +1,7 @@
 name: chocolatine
 
 env:
-  MIRROR_URL: git@github.com:EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot.git
+  MIRROR_URL: https://github.com/EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot
   EXECUTABLE: ./anagram
 
 on:
@@ -24,7 +24,7 @@ jobs:
       - name: Check if repository is the mirror
         id: check_repo
         run: |
-          if [[ "${{ github.repository }}" == "EpitechPGEPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot" ]]; then
+          if [[ "${{ github.repository }}" == "${{env.MIRROR_URL}}" ]]; then
             echo "Already in Epitech repository, no need to continue"
             echo "should_continue=false" >> "$GITHUB_OUTPUT"
           else
@@ -94,4 +94,4 @@ jobs:
         uses: pixta-dev/repository-mirroring-action@v1
         with:
           target_repo_url: ${{ env.MIRROR_URL }}
-          ssh_private_key: ${{ secrets.PETIT_PAIN }}
+          ssh_private_key: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
