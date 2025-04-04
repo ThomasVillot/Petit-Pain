@@ -88,7 +88,7 @@ jobs:
           fi
 
   push_to_mirror:
-    needs: check_repository
+    needs: [check_repository, running_test]
     if: ${{ needs.check_repository.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
