@@ -17,19 +17,24 @@ on:
 jobs:
   check_repository:
     runs-on: ubuntu-latest
+    outputs:
+      should_continue: ${{ steps.check_repo.outputs.should_continue }}
     steps:
       - uses: actions/checkout@v4
       - name: Check if repository is the mirror
+        id: check_repo
         run: |
           if [[ "${{ github.repository }}" == "EpitechPromo2029/B-DOP-200-LIL-2-1-chocolatine-thomas.villot" ]]; then
             echo "Already in Epitech repository, no need to push to mirror"
-            exit 1
+            echo "should_continue=false" >> $GITHUB_OUTPUT
           else
-            echo "Not in Epitech repository, will push to mirror"
-            exit 0
+            echo "Not in Epitech repository, will continue workflow"
+            echo "should_continue=true" >> $GITHUB_OUTPUT
           fi
 
   check_coding_style:
+    needs: check_repository
+    if: ${{ needs.check_repository.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/epitech/coding-style-checker:latest
@@ -47,6 +52,7 @@ jobs:
 
   check_program_compilation:
     needs: check_coding_style
+    if: ${{ needs.check_repository.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker
@@ -65,6 +71,7 @@ jobs:
 
   running_test:
     needs: check_program_compilation
+    if: ${{ needs.check_repository.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker
@@ -81,7 +88,8 @@ jobs:
           fi
 
   push_to_mirror:
-    needs:  check_repository
+    needs: check_repository
+    if: ${{ needs.check_repository.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
